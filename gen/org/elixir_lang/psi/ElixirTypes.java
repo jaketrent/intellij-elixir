@@ -51,6 +51,7 @@ public interface ElixirTypes {
   IElementType DOT_INFIX_OPERATOR = new ElixirElementType("DOT_INFIX_OPERATOR");
   IElementType DO_BLOCK = new ElixirElementType("DO_BLOCK");
   IElementType EMPTY_PARENTHESES = new ElixirElementType("EMPTY_PARENTHESES");
+  IElementType EMPTY_PARENTHESES_ADDITION_OPERATION = new ElixirElementType("EMPTY_PARENTHESES_ADDITION_OPERATION");
   IElementType EMPTY_PARENTHESES_EXPRESSION = new ElixirElementType("EMPTY_PARENTHESES_EXPRESSION");
   IElementType EMPTY_PARENTHESES_HAT_OPERATION = new ElixirElementType("EMPTY_PARENTHESES_HAT_OPERATION");
   IElementType EMPTY_PARENTHESES_MULTIPLICATION_OPERATION = new ElixirElementType("EMPTY_PARENTHESES_MULTIPLICATION_OPERATION");
@@ -458,6 +459,9 @@ public interface ElixirTypes {
       }
       else if (type == EMPTY_PARENTHESES) {
         return new ElixirEmptyParenthesesImpl(node);
+      }
+      else if (type == EMPTY_PARENTHESES_ADDITION_OPERATION) {
+        return new ElixirEmptyParenthesesAdditionOperationImpl(node);
       }
       else if (type == EMPTY_PARENTHESES_EXPRESSION) {
         return new ElixirEmptyParenthesesExpressionImpl(node);

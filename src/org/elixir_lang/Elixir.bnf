@@ -1907,9 +1907,21 @@ private unmatchedExpression ::= blockExpression | // @see https://github.com/eli
    op_expr -> hat_op_eol expr : {'$1', '$2'}.
  */
 
+/*
+ * Addition Operation - left-associative
+ */
+emptyParenthesesAdditionOperation ::= emptyParentheses additionInfixOperator emptyParenthesesExpression
+                                      { implements = "org.elixir_lang.psi.InfixOperation" methods = [quote] }
+
+/*
+ * Multiplication Operation - left-associative
+ */
 emptyParenthesesMultiplicationOperation ::= emptyParentheses multiplicationInfixOperator emptyParenthesesExpression
                                             { implements = "org.elixir_lang.psi.InfixOperation" methods = [quote] }
 
+/*
+ * Hat Operation - left-associative
+ */
 emptyParenthesesHatOperation ::= emptyParentheses hatInfixOperator emptyParenthesesExpression
                                  { implements = "org.elixir_lang.psi.InfixOperation" methods = [quote] }
 
@@ -1919,7 +1931,8 @@ emptyParenthesesOperand ::= emptyParentheses |
                             matchedExpression
                             { implements = "org.elixir_lang.psi.Quotable" methods = [quote] }
 
-emptyParenthesesExpression ::= emptyParenthesesMultiplicationOperation |
+emptyParenthesesExpression ::= emptyParenthesesAdditionOperation |
+                               emptyParenthesesMultiplicationOperation |
                                emptyParenthesesHatOperation |
                                emptyParenthesesOperand
 
