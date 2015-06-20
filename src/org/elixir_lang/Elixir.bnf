@@ -2,6 +2,8 @@
   parserClass="org.elixir_lang.parser.ElixirParser"
 
   extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+  // direct children of emptyParenthesesExpression
+  extends("emptyParentheses.*Opera(nd|tion)")=emptyParenthesesExpression
   // direct children of matchedExpression
   extends("matched.*Operation|matched(AtUnqualifiedNoParentheses|QualifiedNoArguments|(Q|Unq)ualified(No)?Parentheses)Call|variable|accessExpression")=matchedExpression
 
@@ -98,7 +100,8 @@ endOfExpression ::= infixSemicolon | EOL { implements = "org.elixir_lang.psi.Unq
 captureExpressionOperation ::= capturePrefixOperator expression
                                { implements = "org.elixir_lang.psi.PrefixOperation" methods = [quote] }
 
-private expression ::= emptyParentheses |
+private expression ::= emptyParenthesesExpression |
+                       emptyParentheses |
                        unmatchedExpression |
                        unqualifiedNoParenthesesManyArgumentsCall |
                        matchedExpression
@@ -1885,6 +1888,42 @@ private unmatchedExpression ::= blockExpression | // @see https://github.com/eli
 
 /*
  *
+ * Empty Parentheses Expression
+ *
+   op_expr -> in_match_op_eol expr : {'$1', '$2'}.
+   op_expr -> when_op_eol expr : {'$1', '$2'}.
+   op_expr -> type_op_eol expr : {'$1', '$2'}.
+   op_expr -> pipe_op_eol expr : {'$1', '$2'}.
+   op_expr -> match_op_eol expr : {'$1', '$2'}.
+   op_expr -> or_op_eol expr : {'$1', '$2'}.
+   op_expr -> and_op_eol expr : {'$1', '$2'}.
+   op_expr -> comp_op_eol expr : {'$1', '$2'}.
+   op_expr -> rel_op_eol expr : {'$1', '$2'}.
+   op_expr -> arrow_op_eol expr : {'$1', '$2'}.
+   op_expr -> in_op_eol expr : {'$1', '$2'}.
+   op_expr -> two_op_eol expr : {'$1', '$2'}.
+   op_expr -> add_op_eol expr : {'$1', '$2'}.
+   op_expr -> mult_op_eol expr : {'$1', '$2'}.
+   op_expr -> hat_op_eol expr : {'$1', '$2'}.
+ */
+
+emptyParenthesesHatOperation ::= emptyParentheses hatInfixOperator emptyParenthesesExpression
+                                 { implements = "org.elixir_lang.psi.InfixOperation" methods = [quote] }
+
+emptyParenthesesOperand ::= emptyParentheses |
+                            unmatchedExpression |
+                            unqualifiedNoParenthesesManyArgumentsCall |
+                            matchedExpression
+                            { implements = "org.elixir_lang.psi.Quotable" methods = [quote] }
+
+emptyParenthesesExpression ::= emptyParenthesesHatOperation |
+                               emptyParenthesesOperand
+
+emptyParentheses ::= OPENING_PARENTHESIS EOL* CLOSING_PARENTHESIS
+                     { implements = "org.elixir_lang.psi.Quotable" methods = [quote] }
+
+/*
+ *
  *
  * Whole Numbers
  *
@@ -2110,8 +2149,6 @@ sigilHexadecimalEscapeSequence ::= hexadecimalEscapePrefix (openHexadecimalEscap
                                      methods = [codePoint]
                                    }
 
-emptyParentheses ::= OPENING_PARENTHESIS EOL* CLOSING_PARENTHESIS
-                     { implements = "org.elixir_lang.psi.Quotable" methods = [quote] }
 interpolation ::= INTERPOLATION_START elixirFile INTERPOLATION_END
                   { implements = "org.elixir_lang.psi.Quotable" methods = [quote] }
 

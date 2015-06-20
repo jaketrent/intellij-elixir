@@ -46,6 +46,12 @@ public class ElixirAdjacentExpressionImpl extends ASTWrapperPsiElement implement
 
   @Override
   @Nullable
+  public ElixirEmptyParenthesesExpression getEmptyParenthesesExpression() {
+    return findChildByClass(ElixirEmptyParenthesesExpression.class);
+  }
+
+  @Override
+  @Nullable
   public ElixirMatchedExpression getMatchedExpression() {
     return findChildByClass(ElixirMatchedExpression.class);
   }

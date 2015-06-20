@@ -184,6 +184,20 @@ public class ElixirVisitor extends PsiElementVisitor {
     visitQuotable(o);
   }
 
+  public void visitEmptyParenthesesExpression(@NotNull ElixirEmptyParenthesesExpression o) {
+    visitPsiElement(o);
+  }
+
+  public void visitEmptyParenthesesHatOperation(@NotNull ElixirEmptyParenthesesHatOperation o) {
+    visitEmptyParenthesesExpression(o);
+    // visitInfixOperation(o);
+  }
+
+  public void visitEmptyParenthesesOperand(@NotNull ElixirEmptyParenthesesOperand o) {
+    visitEmptyParenthesesExpression(o);
+    // visitQuotable(o);
+  }
+
   public void visitEnclosedHexadecimalEscapeSequence(@NotNull ElixirEnclosedHexadecimalEscapeSequence o) {
     visitEscapedHexadecimalDigits(o);
   }

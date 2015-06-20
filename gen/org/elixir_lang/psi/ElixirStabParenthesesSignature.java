@@ -20,6 +20,9 @@ public interface ElixirStabParenthesesSignature extends Quotable {
   ElixirEmptyParentheses getEmptyParentheses();
 
   @Nullable
+  ElixirEmptyParenthesesExpression getEmptyParenthesesExpression();
+
+  @Nullable
   ElixirMatchedExpression getMatchedExpression();
 
   @NotNull

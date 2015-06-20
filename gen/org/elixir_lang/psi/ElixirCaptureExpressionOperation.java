@@ -23,6 +23,9 @@ public interface ElixirCaptureExpressionOperation extends PrefixOperation {
   ElixirEmptyParentheses getEmptyParentheses();
 
   @Nullable
+  ElixirEmptyParenthesesExpression getEmptyParenthesesExpression();
+
+  @Nullable
   ElixirMatchedExpression getMatchedExpression();
 
   @Nullable

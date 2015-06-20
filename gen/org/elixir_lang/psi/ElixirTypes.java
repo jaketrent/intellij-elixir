@@ -51,6 +51,9 @@ public interface ElixirTypes {
   IElementType DOT_INFIX_OPERATOR = new ElixirElementType("DOT_INFIX_OPERATOR");
   IElementType DO_BLOCK = new ElixirElementType("DO_BLOCK");
   IElementType EMPTY_PARENTHESES = new ElixirElementType("EMPTY_PARENTHESES");
+  IElementType EMPTY_PARENTHESES_EXPRESSION = new ElixirElementType("EMPTY_PARENTHESES_EXPRESSION");
+  IElementType EMPTY_PARENTHESES_HAT_OPERATION = new ElixirElementType("EMPTY_PARENTHESES_HAT_OPERATION");
+  IElementType EMPTY_PARENTHESES_OPERAND = new ElixirElementType("EMPTY_PARENTHESES_OPERAND");
   IElementType ENCLOSED_HEXADECIMAL_ESCAPE_SEQUENCE = new ElixirElementType("ENCLOSED_HEXADECIMAL_ESCAPE_SEQUENCE");
   IElementType END_OF_EXPRESSION = new ElixirElementType("END_OF_EXPRESSION");
   IElementType ESCAPED_CHARACTER = new ElixirElementType("ESCAPED_CHARACTER");
@@ -454,6 +457,15 @@ public interface ElixirTypes {
       }
       else if (type == EMPTY_PARENTHESES) {
         return new ElixirEmptyParenthesesImpl(node);
+      }
+      else if (type == EMPTY_PARENTHESES_EXPRESSION) {
+        return new ElixirEmptyParenthesesExpressionImpl(node);
+      }
+      else if (type == EMPTY_PARENTHESES_HAT_OPERATION) {
+        return new ElixirEmptyParenthesesHatOperationImpl(node);
+      }
+      else if (type == EMPTY_PARENTHESES_OPERAND) {
+        return new ElixirEmptyParenthesesOperandImpl(node);
       }
       else if (type == ENCLOSED_HEXADECIMAL_ESCAPE_SEQUENCE) {
         return new ElixirEnclosedHexadecimalEscapeSequenceImpl(node);

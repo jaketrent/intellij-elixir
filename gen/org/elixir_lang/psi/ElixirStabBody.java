@@ -21,6 +21,9 @@ public interface ElixirStabBody extends Quotable {
   List<ElixirEmptyParentheses> getEmptyParenthesesList();
 
   @NotNull
+  List<ElixirEmptyParenthesesExpression> getEmptyParenthesesExpressionList();
+
+  @NotNull
   List<ElixirEndOfExpression> getEndOfExpressionList();
 
   @NotNull

@@ -5,7 +5,7 @@ import com.ericsson.otp.erlang.OtpErlangObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface ElixirAdjacentExpression extends Quotable {
+public interface ElixirEmptyParenthesesOperand extends ElixirEmptyParenthesesExpression, Quotable {
 
   @Nullable
   ElixirAtBlockOperation getAtBlockOperation();
@@ -18,9 +18,6 @@ public interface ElixirAdjacentExpression extends Quotable {
 
   @Nullable
   ElixirEmptyParentheses getEmptyParentheses();
-
-  @Nullable
-  ElixirEmptyParenthesesExpression getEmptyParenthesesExpression();
 
   @Nullable
   ElixirMatchedExpression getMatchedExpression();

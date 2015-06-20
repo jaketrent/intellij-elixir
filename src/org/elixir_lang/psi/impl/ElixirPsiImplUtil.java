@@ -1282,6 +1282,18 @@ public class ElixirPsiImplUtil {
         return new OtpErlangAtom("nil");
     }
 
+    @Contract(pure = true)
+    @NotNull
+    public static OtpErlangObject quote(@NotNull ElixirEmptyParenthesesOperand emptyParenthesesOperand) {
+        PsiElement[] children = emptyParenthesesOperand.getChildren();
+
+        assert children.length == 1;
+
+        Quotable quotableChild = (Quotable) children[0];
+
+        return quotableChild.quote();
+    }
+
     public static OtpErlangObject quote(ElixirFile file) {
         final Deque<OtpErlangObject> quotedChildren = new LinkedList<OtpErlangObject>();
 

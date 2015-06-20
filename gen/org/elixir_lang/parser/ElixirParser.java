@@ -152,6 +152,15 @@ public class ElixirParser implements PsiParser {
     else if (t == EMPTY_PARENTHESES) {
       r = emptyParentheses(b, 0);
     }
+    else if (t == EMPTY_PARENTHESES_EXPRESSION) {
+      r = emptyParenthesesExpression(b, 0);
+    }
+    else if (t == EMPTY_PARENTHESES_HAT_OPERATION) {
+      r = emptyParenthesesHatOperation(b, 0);
+    }
+    else if (t == EMPTY_PARENTHESES_OPERAND) {
+      r = emptyParenthesesOperand(b, 0);
+    }
     else if (t == ENCLOSED_HEXADECIMAL_ESCAPE_SEQUENCE) {
       r = enclosedHexadecimalEscapeSequence(b, 0);
     }
@@ -595,6 +604,7 @@ public class ElixirParser implements PsiParser {
   }
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
+    create_token_set_(EMPTY_PARENTHESES_EXPRESSION, EMPTY_PARENTHESES_HAT_OPERATION, EMPTY_PARENTHESES_OPERAND),
     create_token_set_(ACCESS_EXPRESSION, MATCHED_ADDITION_OPERATION, MATCHED_AND_OPERATION, MATCHED_ARROW_OPERATION,
       MATCHED_AT_NON_NUMERIC_OPERATION, MATCHED_AT_UNQUALIFIED_BRACKET_OPERATION, MATCHED_AT_UNQUALIFIED_NO_PARENTHESES_CALL, MATCHED_BRACKET_OPERATION,
       MATCHED_CAPTURE_NON_NUMERIC_OPERATION, MATCHED_COMPARISON_OPERATION, MATCHED_DOT_CALL_OPERATION, MATCHED_EXPRESSION,
@@ -2024,6 +2034,50 @@ public class ElixirParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // emptyParenthesesHatOperation |
+  //                                emptyParenthesesOperand
+  public static boolean emptyParenthesesExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "emptyParenthesesExpression")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _COLLAPSE_, "<empty parentheses expression>");
+    r = emptyParenthesesHatOperation(b, l + 1);
+    if (!r) r = emptyParenthesesOperand(b, l + 1);
+    exit_section_(b, l, m, EMPTY_PARENTHESES_EXPRESSION, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // emptyParentheses hatInfixOperator emptyParenthesesExpression
+  public static boolean emptyParenthesesHatOperation(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "emptyParenthesesHatOperation")) return false;
+    if (!nextTokenIs(b, OPENING_PARENTHESIS)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = emptyParentheses(b, l + 1);
+    r = r && hatInfixOperator(b, l + 1);
+    r = r && emptyParenthesesExpression(b, l + 1);
+    exit_section_(b, m, EMPTY_PARENTHESES_HAT_OPERATION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // emptyParentheses |
+  //                             unmatchedExpression |
+  //                             unqualifiedNoParenthesesManyArgumentsCall |
+  //                             matchedExpression
+  public static boolean emptyParenthesesOperand(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "emptyParenthesesOperand")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, "<empty parentheses operand>");
+    r = emptyParentheses(b, l + 1);
+    if (!r) r = unmatchedExpression(b, l + 1);
+    if (!r) r = unqualifiedNoParenthesesManyArgumentsCall(b, l + 1);
+    if (!r) r = matchedExpression(b, l + 1, -1);
+    exit_section_(b, l, m, EMPTY_PARENTHESES_OPERAND, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
   // OPENING_CURLY VALID_HEXADECIMAL_DIGITS CLOSING_CURLY
   public static boolean enclosedHexadecimalEscapeSequence(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "enclosedHexadecimalEscapeSequence")) return false;
@@ -2075,7 +2129,8 @@ public class ElixirParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // emptyParentheses |
+  // emptyParenthesesExpression |
+  //                        emptyParentheses |
   //                        unmatchedExpression |
   //                        unqualifiedNoParenthesesManyArgumentsCall |
   //                        matchedExpression
@@ -2083,7 +2138,8 @@ public class ElixirParser implements PsiParser {
     if (!recursion_guard_(b, l, "expression")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = emptyParentheses(b, l + 1);
+    r = emptyParenthesesExpression(b, l + 1);
+    if (!r) r = emptyParentheses(b, l + 1);
     if (!r) r = unmatchedExpression(b, l + 1);
     if (!r) r = unqualifiedNoParenthesesManyArgumentsCall(b, l + 1);
     if (!r) r = matchedExpression(b, l + 1, -1);

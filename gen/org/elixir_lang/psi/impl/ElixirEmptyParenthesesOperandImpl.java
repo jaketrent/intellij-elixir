@@ -2,21 +2,20 @@
 package org.elixir_lang.psi.impl;
 
 import com.ericsson.otp.erlang.OtpErlangObject;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
 import org.elixir_lang.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ElixirCaptureExpressionOperationImpl extends ASTWrapperPsiElement implements ElixirCaptureExpressionOperation {
+public class ElixirEmptyParenthesesOperandImpl extends ElixirEmptyParenthesesExpressionImpl implements ElixirEmptyParenthesesOperand {
 
-  public ElixirCaptureExpressionOperationImpl(ASTNode node) {
+  public ElixirEmptyParenthesesOperandImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ElixirVisitor) ((ElixirVisitor)visitor).visitCaptureExpressionOperation(this);
+    if (visitor instanceof ElixirVisitor) ((ElixirVisitor)visitor).visitEmptyParenthesesOperand(this);
     else super.accept(visitor);
   }
 
@@ -39,21 +38,9 @@ public class ElixirCaptureExpressionOperationImpl extends ASTWrapperPsiElement i
   }
 
   @Override
-  @NotNull
-  public ElixirCapturePrefixOperator getCapturePrefixOperator() {
-    return findNotNullChildByClass(ElixirCapturePrefixOperator.class);
-  }
-
-  @Override
   @Nullable
   public ElixirEmptyParentheses getEmptyParentheses() {
     return findChildByClass(ElixirEmptyParentheses.class);
-  }
-
-  @Override
-  @Nullable
-  public ElixirEmptyParenthesesExpression getEmptyParenthesesExpression() {
-    return findChildByClass(ElixirEmptyParenthesesExpression.class);
   }
 
   @Override
