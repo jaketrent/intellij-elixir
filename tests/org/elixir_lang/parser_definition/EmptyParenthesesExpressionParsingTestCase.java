@@ -8,6 +8,10 @@ public class EmptyParenthesesExpressionParsingTestCase extends ParsingTestCase {
         assertParsedAndQuotedCorrectly();
     }
 
+    public void testMultiplicationOperation() {
+        assertParsedAndQuotedCorrectly();
+    }
+
     @Override
     protected String getTestDataPath() {
         return super.getTestDataPath() + "/empty_parentheses_expression_parsing_test_case";

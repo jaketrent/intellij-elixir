@@ -193,6 +193,11 @@ public class ElixirVisitor extends PsiElementVisitor {
     // visitInfixOperation(o);
   }
 
+  public void visitEmptyParenthesesMultiplicationOperation(@NotNull ElixirEmptyParenthesesMultiplicationOperation o) {
+    visitEmptyParenthesesExpression(o);
+    // visitInfixOperation(o);
+  }
+
   public void visitEmptyParenthesesOperand(@NotNull ElixirEmptyParenthesesOperand o) {
     visitEmptyParenthesesExpression(o);
     // visitQuotable(o);

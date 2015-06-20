@@ -158,6 +158,9 @@ public class ElixirParser implements PsiParser {
     else if (t == EMPTY_PARENTHESES_HAT_OPERATION) {
       r = emptyParenthesesHatOperation(b, 0);
     }
+    else if (t == EMPTY_PARENTHESES_MULTIPLICATION_OPERATION) {
+      r = emptyParenthesesMultiplicationOperation(b, 0);
+    }
     else if (t == EMPTY_PARENTHESES_OPERAND) {
       r = emptyParenthesesOperand(b, 0);
     }
@@ -604,7 +607,7 @@ public class ElixirParser implements PsiParser {
   }
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
-    create_token_set_(EMPTY_PARENTHESES_EXPRESSION, EMPTY_PARENTHESES_HAT_OPERATION, EMPTY_PARENTHESES_OPERAND),
+    create_token_set_(EMPTY_PARENTHESES_EXPRESSION, EMPTY_PARENTHESES_HAT_OPERATION, EMPTY_PARENTHESES_MULTIPLICATION_OPERATION, EMPTY_PARENTHESES_OPERAND),
     create_token_set_(ACCESS_EXPRESSION, MATCHED_ADDITION_OPERATION, MATCHED_AND_OPERATION, MATCHED_ARROW_OPERATION,
       MATCHED_AT_NON_NUMERIC_OPERATION, MATCHED_AT_UNQUALIFIED_BRACKET_OPERATION, MATCHED_AT_UNQUALIFIED_NO_PARENTHESES_CALL, MATCHED_BRACKET_OPERATION,
       MATCHED_CAPTURE_NON_NUMERIC_OPERATION, MATCHED_COMPARISON_OPERATION, MATCHED_DOT_CALL_OPERATION, MATCHED_EXPRESSION,
@@ -2034,13 +2037,15 @@ public class ElixirParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // emptyParenthesesHatOperation |
+  // emptyParenthesesMultiplicationOperation |
+  //                                emptyParenthesesHatOperation |
   //                                emptyParenthesesOperand
   public static boolean emptyParenthesesExpression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "emptyParenthesesExpression")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _COLLAPSE_, "<empty parentheses expression>");
-    r = emptyParenthesesHatOperation(b, l + 1);
+    r = emptyParenthesesMultiplicationOperation(b, l + 1);
+    if (!r) r = emptyParenthesesHatOperation(b, l + 1);
     if (!r) r = emptyParenthesesOperand(b, l + 1);
     exit_section_(b, l, m, EMPTY_PARENTHESES_EXPRESSION, r, false, null);
     return r;
@@ -2057,6 +2062,20 @@ public class ElixirParser implements PsiParser {
     r = r && hatInfixOperator(b, l + 1);
     r = r && emptyParenthesesExpression(b, l + 1);
     exit_section_(b, m, EMPTY_PARENTHESES_HAT_OPERATION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // emptyParentheses multiplicationInfixOperator emptyParenthesesExpression
+  public static boolean emptyParenthesesMultiplicationOperation(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "emptyParenthesesMultiplicationOperation")) return false;
+    if (!nextTokenIs(b, OPENING_PARENTHESIS)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = emptyParentheses(b, l + 1);
+    r = r && multiplicationInfixOperator(b, l + 1);
+    r = r && emptyParenthesesExpression(b, l + 1);
+    exit_section_(b, m, EMPTY_PARENTHESES_MULTIPLICATION_OPERATION, r);
     return r;
   }
 

@@ -53,6 +53,7 @@ public interface ElixirTypes {
   IElementType EMPTY_PARENTHESES = new ElixirElementType("EMPTY_PARENTHESES");
   IElementType EMPTY_PARENTHESES_EXPRESSION = new ElixirElementType("EMPTY_PARENTHESES_EXPRESSION");
   IElementType EMPTY_PARENTHESES_HAT_OPERATION = new ElixirElementType("EMPTY_PARENTHESES_HAT_OPERATION");
+  IElementType EMPTY_PARENTHESES_MULTIPLICATION_OPERATION = new ElixirElementType("EMPTY_PARENTHESES_MULTIPLICATION_OPERATION");
   IElementType EMPTY_PARENTHESES_OPERAND = new ElixirElementType("EMPTY_PARENTHESES_OPERAND");
   IElementType ENCLOSED_HEXADECIMAL_ESCAPE_SEQUENCE = new ElixirElementType("ENCLOSED_HEXADECIMAL_ESCAPE_SEQUENCE");
   IElementType END_OF_EXPRESSION = new ElixirElementType("END_OF_EXPRESSION");
@@ -463,6 +464,9 @@ public interface ElixirTypes {
       }
       else if (type == EMPTY_PARENTHESES_HAT_OPERATION) {
         return new ElixirEmptyParenthesesHatOperationImpl(node);
+      }
+      else if (type == EMPTY_PARENTHESES_MULTIPLICATION_OPERATION) {
+        return new ElixirEmptyParenthesesMultiplicationOperationImpl(node);
       }
       else if (type == EMPTY_PARENTHESES_OPERAND) {
         return new ElixirEmptyParenthesesOperandImpl(node);
